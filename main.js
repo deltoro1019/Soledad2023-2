@@ -1,6 +1,6 @@
-// Datos de los puestos de votación con latitud, longitud e información
-const puestosDeVotacion = [
-  {nombre: "I.E.TEC.JOSE CASTILLO BOLIVAR", latitud: 10.891466385672564, longitud: -74.80776362400663,  informacion:"958 Votos "},
+document.addEventListener('DOMContentLoaded', () => {
+  const puestosDeVotacion = [
+     {nombre: "I.E.TEC.JOSE CASTILLO BOLIVAR", latitud: 10.891466385672564, longitud: -74.80776362400663,  informacion:"958 Votos "},
 {nombre: "I.E.BICENTENARIO DE SOLEDAD", latitud: 10.89272505339485, longitud: -74.79753806729623,  informacion:"799 Votos "},
 {nombre: "I.E.JHON F. KENNEDY", latitud: 10.9132787121064, longitud: -74.77177488087351,  informacion:"752 Votos "},
 {nombre: "I.E.NTRA.SRA LAS MISERICORDIAS", latitud: 10.91572006916898, longitud: -74.77063052757114,  informacion:"751 Votos "},
@@ -50,49 +50,50 @@ const puestosDeVotacion = [
 {nombre: "CENTRO EDUCATIVO PRADO DE SOLEDAD", latitud: 10.895411279414471, longitud: -74.7834475913863,  informacion:"0 Votos "},
 {nombre: "C PARA EL DES. AGROECOLO Y AGROINDUST NO", latitud: 10.921371465851436, longitud: -74.7848489681542,  informacion:"0 Votos "},
 // ... Agrega más puestos de votación aquí
-];
+  ];
 
-const map = L.map('map').setView([10.918435, -74.763495], 13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  const map = L.map('map').setView([10.918435, -74.763495], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-const markers = [];
+  const markers = [];
 
-puestosDeVotacion.forEach((puesto, index) => {
-  const row = document.createElement('tr');
-  row.innerHTML = `
-    <td>${puesto.nombre}</td>
-    <td>${puesto.informacion}</td>
-    <td><a href="#" class="route-link" data-lat="${puesto.latitud}" data-lng="${puesto.longitud}">Cómo llegar</a></td>
-  `;
-  const tableBody = document.querySelector('#puestos-table tbody');
-  tableBody.appendChild(row);
+  puestosDeVotacion.forEach((puesto, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${puesto.nombre}</td>
+      <td>${puesto.informacion}</td>
+      <td><a href="#" class="route-link" data-lat="${puesto.latitud}" data-lng="${puesto.longitud}">Cómo llegar</a></td>
+    `;
+    const tableBody = document.querySelector('#info-table tbody');
+    tableBody.appendChild(row);
 
-  const marker = L.marker([puesto.latitud, puesto.longitud]).addTo(map);
-  marker.bindPopup(`<b>${puesto.nombre}</b><br>${puesto.informacion}`);
-  markers.push(marker);
+    const marker = L.marker([puesto.latitud, puesto.longitud]).addTo(map);
+    marker.bindPopup(`<b>${puesto.nombre}</b><br>${puesto.informacion}`);
+    markers.push(marker);
 
-  row.addEventListener('click', () => {
-    map.setView([puesto.latitud, puesto.longitud], 15);
-    markers[index].openPopup();
+    row.addEventListener('click', () => {
+      map.setView([puesto.latitud, puesto.longitud], 15);
+      markers[index].openPopup();
 
-    tableRows.forEach((tableRow, tableRowIndex) => {
-      if (tableRowIndex === index) {
-        tableRow.classList.add('selected');
-      } else {
-        tableRow.classList.remove('selected');
-      }
+      const tableRows = document.querySelectorAll('#info-table tbody tr');
+      tableRows.forEach((tableRow, tableRowIndex) => {
+        if (tableRowIndex === index) {
+          tableRow.classList.add('selected');
+        } else {
+          tableRow.classList.remove('selected');
+        }
+      });
     });
   });
-});
 
-// Agregar funcionalidad para "Cómo llegar"
-const routeLinks = document.querySelectorAll('.route-link');
-routeLinks.forEach(link => {
-  link.addEventListener('click', function (e) {
-    e.preventDefault();
-    const lat = parseFloat(this.getAttribute('data-lat'));
-    const lng = parseFloat(this.getAttribute('data-lng'));
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-    window.open(url, '_blank');
+  const routeLinks = document.querySelectorAll('.route-link');
+  routeLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const lat = parseFloat(this.getAttribute('data-lat'));
+      const lng = parseFloat(this.getAttribute('data-lng'));
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      window.open(url, '_blank');
+    });
   });
 });
