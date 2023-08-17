@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     row.innerHTML = `
       <td>${puesto.nombre}</td>
       <td>${puesto.informacion}</td>
-      <td><a href="#" class="route-link" data-lat="${puesto.latitud}" data-lng="${puesto.longitud}">Como llegar</a></td>
+      <td><a href="#" class="route-link" data-lat="${puesto.latitud}" data-lng="${puesto.longitud}">Cómo llegar</a></td>
     `;
     const tableBody = document.querySelector('#info-table tbody');
     tableBody.appendChild(row);
